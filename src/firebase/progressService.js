@@ -3,10 +3,15 @@ import {
   doc,
   getDoc,
   setDoc,
-  updateDoc,
+  collection,
+  addDoc,
+  getDocs,
+  orderBy,
+  query,
   onSnapshot,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
+  serverTimestamp
 } from 'firebase/firestore';
 
 const STORAGE_KEY = 'learnup_progress';
@@ -166,5 +171,60 @@ export const resetProgress = async (userId = 'priya') => {
   } catch (error) {
     saveLocalProgress(fresh);
     return fresh;
+  }
+};
+
+// Save an English reflection entry for a given day
+export const saveEnglishReflection = async (dayNum, reflectionText, userId = 'priya') => {
+  const entry = {
+    day: dayNum,
+    text: reflectionText,
+    savedAt: new Date().toISOString(),
+  };
+
+  // Always save to localStorage too
+  const localKey = `learnup_english`;
+  try {
+    const existing = JSON.parse(localStorage.getItem(localKey) || '{}');
+    existing[dayNum] = entry;
+    localStorage.setItem(localKey, JSON.stringify(existing));
+  } catch {}
+
+  if (!isFirebaseConfigured()) return entry;
+
+  try {
+    const docRef = doc(db, 'users', userId, 'englishJournal', `day${dayNum}`);
+    await setDoc(docRef, { ...entry, savedAt: serverTimestamp() });
+    return entry;
+  } catch (error) {
+    console.warn('Firestore reflection save failed:', error);
+    return entry;
+  }
+};
+
+// Get all English reflections for Priya
+export const getAllEnglishReflections = async (userId = 'priya') => {
+  // Always check local first
+  const localKey = `learnup_english`;
+  let localData = {};
+  try {
+    localData = JSON.parse(localStorage.getItem(localKey) || '{}');
+  } catch {}
+
+  if (!isFirebaseConfigured()) return localData;
+
+  try {
+    const colRef = collection(db, 'users', userId, 'englishJournal');
+    const snapshot = await getDocs(colRef);
+    const result = {};
+    snapshot.forEach(d => {
+      const data = d.data();
+      result[data.day] = data;
+    });
+    // Merge local with cloud (cloud wins)
+    return { ...localData, ...result };
+  } catch (error) {
+    console.warn('Firestore reflection fetch failed:', error);
+    return localData;
   }
 };

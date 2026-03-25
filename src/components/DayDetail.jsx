@@ -5,6 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useProgress } from '../contexts/ProgressContext';
 import { schedule } from '../data/schedule';
 import { triggerFlowerShower, triggerSmallCelebration } from './FlowerShower';
+import EnglishSection from './EnglishSection';
 
 export default function DayDetail() {
   const { weekNum, dayInWeek } = useParams();
@@ -233,6 +234,11 @@ export default function DayDetail() {
             </div>
           ))}
         </motion.div>
+      )}
+
+      {/* English Learning Section */}
+      {day.type !== 'rest' && (
+        <EnglishSection absDay={absDay} />
       )}
 
       {/* Navigation */}
