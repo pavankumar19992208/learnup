@@ -1,10 +1,9 @@
 import { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useProgress } from '../contexts/ProgressContext';
 import { schedule } from '../data/schedule';
-import { triggerFlowerShower, triggerSmallCelebration } from './FlowerShower';
 import EnglishSection from './EnglishSection';
 
 export default function DayDetail() {
@@ -13,6 +12,32 @@ export default function DayDetail() {
   const { t, tContent, language } = useLanguage();
   const { isTaskCompleted, markComplete, markIncomplete, getDayCompletionPercent, isDayLocked } = useProgress();
   const [copiedId, setCopiedId] = useState(null);
+  const [boostMsg, setBoostMsg] = useState(null);
+
+  const TASK_BOOSTS = [
+    "Great work, Priya! ✅ Keep going!",
+    "That's one more down, Priya! 💪",
+    "Well done, Priya! You're on fire! 🔥",
+    "Yes! Priya is crushing it! ⚡",
+    "Superb, Priya! लगे रहो! 🚀",
+    "Amazing focus, Priya! One step closer! 🎯",
+    "Priya, you're building something real today! 🛠️",
+    "Task done! Priya, you're unstoppable! 🌟",
+  ];
+
+  const DAY_COMPLETE_BOOSTS = [
+    "Day Complete! Priya, you are going to be a perfect developer — very soon! 🏆",
+    "All tasks done! Priya, your consistency is your superpower! 💎",
+    "Incredible work today, Priya! माँ-पापा को तुम पर गर्व होगा! 🌟",
+    "You completed the full day, Priya! Don't stop now! 🚀",
+  ];
+
+  const showBoost = (isDayComplete) => {
+    const pool = isDayComplete ? DAY_COMPLETE_BOOSTS : TASK_BOOSTS;
+    const msg = pool[Math.floor(Math.random() * pool.length)];
+    setBoostMsg(msg);
+    setTimeout(() => setBoostMsg(null), 4000);
+  };
 
   const week = schedule.find(w => w.week === parseInt(weekNum));
   const day = week?.days.find(d => d.dayInWeek === parseInt(dayInWeek));
@@ -34,13 +59,10 @@ export default function DayDetail() {
     if (isTaskCompleted(dayId, taskId)) {
       await markIncomplete(dayId, taskId);
     } else {
-      await markComplete(dayId, taskId);
-      triggerSmallCelebration();
-      // Check if day is now complete
-      const newCompletion = getDayCompletionPercent(dayId, totalTasks);
-      if (newCompletion >= 100) {
-        setTimeout(() => triggerFlowerShower(), 300);
-      }
+      const updated = await markComplete(dayId, taskId);
+      const newDone = updated?.completedTasks?.[dayId]?.length || 0;
+      const dayDone = newDone >= totalTasks;
+      showBoost(dayDone);
     }
   };
 
@@ -64,6 +86,28 @@ export default function DayDetail() {
       >
         ← Back
       </motion.button>
+
+      {/* Boost Toast */}
+      <AnimatePresence>
+        {boostMsg && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            style={{
+              position: 'fixed', bottom: '90px', left: '50%', transform: 'translateX(-50%)',
+              background: 'var(--gradient-primary)',
+              color: '#fff', padding: '12px 22px', borderRadius: '50px',
+              fontWeight: 700, fontSize: '0.9rem', zIndex: 500,
+              whiteSpace: 'nowrap', boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+              maxWidth: '90vw', textAlign: 'center',
+            }}
+          >
+            {boostMsg}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {isLocked && (
         <div className="card" style={{ background: 'var(--color-primary-glow)', border: '1px solid var(--border-color-strong)', padding: '16px', marginBottom: '20px', display: 'flex', gap: '16px', alignItems: 'center' }}>
