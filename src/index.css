@@ -105,6 +105,96 @@
   --gradient-hero: linear-gradient(135deg, #0B0F19 0%, #111827 50%, #0B0F19 100%);
 }
 
+/* ===== Glass Theme — Frosted Aurora ===== */
+[data-theme="glass"] {
+  --color-primary: #7C3AED;
+  --color-primary-light: #A78BFA;
+  --color-primary-dark: #5B21B6;
+  --color-primary-glow: rgba(124, 58, 237, 0.15);
+
+  --color-secondary: #EC4899;
+  --color-secondary-light: #F9A8D4;
+  --color-secondary-dark: #BE185D;
+
+  --color-accent: #06B6D4;
+  --color-accent-light: #67E8F9;
+
+  /* Glass backgrounds — semi-transparent over colorful gradient */
+  --bg-primary: linear-gradient(135deg, #1a0533 0%, #0f0a2e 40%, #001a2c 100%);
+  --bg-secondary: rgba(255, 255, 255, 0.04);
+  --bg-card: rgba(255, 255, 255, 0.08);
+  --bg-card-hover: rgba(255, 255, 255, 0.14);
+  --bg-modal: rgba(20, 10, 50, 0.92);
+  --bg-nav: rgba(15, 5, 40, 0.7);
+
+  --text-primary: #F3E8FF;
+  --text-secondary: #C4B5FD;
+  --text-muted: #7C3AED;
+  --text-inverse: #1a0533;
+
+  --border-color: rgba(167, 139, 250, 0.2);
+  --border-color-strong: rgba(167, 139, 250, 0.4);
+  --shadow-sm: 0 4px 12px rgba(124, 58, 237, 0.2);
+  --shadow-md: 0 8px 24px rgba(124, 58, 237, 0.3);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 30px rgba(124, 58, 237, 0.4);
+
+  --concept-color: #A78BFA;
+  --practice-color: #F9A8D4;
+  --combine-color: #FDE68A;
+  --project-color: #6EE7B7;
+  --rest-color: #67E8F9;
+
+  --gradient-primary: linear-gradient(135deg, #7C3AED 0%, #EC4899 50%, #06B6D4 100%);
+  --gradient-card: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 100%);
+  --gradient-hero: linear-gradient(135deg, #1a0533 0%, #0f0a2e 40%, #001a2c 100%);
+}
+
+/* ===== Notebook Theme — Warm Vintage Paper ===== */
+[data-theme="notebook"] {
+  --color-primary: #92400E;
+  --color-primary-light: #D97706;
+  --color-primary-dark: #78350F;
+  --color-primary-glow: rgba(146, 64, 14, 0.1);
+
+  --color-secondary: #1D4ED8;
+  --color-secondary-light: #3B82F6;
+  --color-secondary-dark: #1E3A8A;
+
+  --color-accent: #065F46;
+  --color-accent-light: #10B981;
+
+  /* Warm paper tones */
+  --bg-primary: #FFFBEB;
+  --bg-secondary: #FEF3C7;
+  --bg-card: #FFFEF5;
+  --bg-card-hover: #FEF9E7;
+  --bg-modal: rgba(255, 251, 235, 0.98);
+  --bg-nav: rgba(255, 251, 235, 0.95);
+
+  --text-primary: #1C1917;
+  --text-secondary: #57534E;
+  --text-muted: #A8A29E;
+  --text-inverse: #FFFBEB;
+
+  --border-color: #D6CFC4;
+  --border-color-strong: #A9A09A;
+  --shadow-sm: 0 2px 6px rgba(30, 10, 0, 0.08);
+  --shadow-md: 0 4px 14px rgba(30, 10, 0, 0.10);
+  --shadow-lg: 0 10px 28px rgba(30, 10, 0, 0.12);
+  --shadow-glow: 0 0 12px rgba(146, 64, 14, 0.2);
+
+  --concept-color: #1D4ED8;
+  --practice-color: #B45309;
+  --combine-color: #065F46;
+  --project-color: #7C3AED;
+  --rest-color: #9F1239;
+
+  --gradient-primary: linear-gradient(135deg, #92400E 0%, #D97706 100%);
+  --gradient-card: linear-gradient(135deg, #FFFEF5 0%, #FEF3C7 100%);
+  --gradient-hero: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 50%, #ECFDF5 100%);
+}
+
 /* --- Global Reset & Base --- */
 *, *::before, *::after {
   margin: 0;
@@ -126,10 +216,49 @@ body {
   overflow-x: hidden;
 }
 
+/* Glass theme needs a hard gradient on html since bg-primary is a gradient value */
+[data-theme="glass"] body {
+  background: linear-gradient(135deg, #1a0533 0%, #0f0a2e 40%, #001a2c 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Glass — frosted card overrides */
+[data-theme="glass"] .card,
+[data-theme="glass"] .glass,
+[data-theme="glass"] .topbar,
+[data-theme="glass"] .navbar,
+[data-theme="glass"] .week-card,
+[data-theme="glass"] .day-card-mini {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(167, 139, 250, 0.25);
+}
+
+/* Notebook — paper feel overrides */
+[data-theme="notebook"] body {
+  background: #FFFBEB;
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 27px,
+      rgba(180, 160, 120, 0.18) 27px,
+      rgba(180, 160, 120, 0.18) 28px
+    );
+  background-attachment: fixed;
+}
+
+[data-theme="notebook"] .card,
+[data-theme="notebook"] .day-card-mini {
+  border-radius: 8px;
+  border-left: 3px solid rgba(180, 83, 9, 0.35);
+}
+
 [data-lang="hi"] body,
 [data-lang="hi"] * {
   font-family: 'Noto Sans Devanagari', 'Outfit', sans-serif;
 }
+
 
 #root {
   min-height: 100vh;
