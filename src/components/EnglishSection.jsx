@@ -5,7 +5,7 @@ import { saveEnglishReflection, getAllEnglishReflections } from '../firebase/pro
 
 const MIN_WORDS = 30;
 
-export default function EnglishSection({ absDay }) {
+export default function EnglishSection({ absDay, onReflectionSaved }) {
   const [reflection, setReflection] = useState('');
   const [saved, setSaved] = useState(null);  // previously saved entry
   const [saving, setSaving] = useState(false);
@@ -45,6 +45,7 @@ export default function EnglishSection({ absDay }) {
     setSaving(false);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
+    if (onReflectionSaved) onReflectionSaved();
   };
 
   const handleLoadHistory = async () => {

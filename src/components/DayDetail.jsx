@@ -5,6 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { useProgress } from '../contexts/ProgressContext';
 import { schedule } from '../data/schedule';
 import EnglishSection from './EnglishSection';
+import DayCompleteModal from './DayCompleteModal';
 
 export default function DayDetail() {
   const { weekNum, dayInWeek } = useParams();
@@ -13,6 +14,7 @@ export default function DayDetail() {
   const { isTaskCompleted, markComplete, markIncomplete, getDayCompletionPercent, isDayLocked } = useProgress();
   const [copiedId, setCopiedId] = useState(null);
   const [boostMsg, setBoostMsg] = useState(null);
+  const [showDayComplete, setShowDayComplete] = useState(false);
 
   const TASK_BOOSTS = [
     "Great work, Priya! ✅ Keep going!",
@@ -63,6 +65,14 @@ export default function DayDetail() {
       const newDone = updated?.completedTasks?.[dayId]?.length || 0;
       const dayDone = newDone >= totalTasks;
       showBoost(dayDone);
+    }
+  };
+
+  // Called by EnglishSection when reflection is saved
+  const handleReflectionSaved = () => {
+    const currentDone = getDayCompletionPercent(dayId, totalTasks);
+    if (currentDone >= 100) {
+      setTimeout(() => setShowDayComplete(true), 600);
     }
   };
 
@@ -283,7 +293,17 @@ export default function DayDetail() {
 
       {/* English Learning Section */}
       {day.type !== 'rest' && (
-        <EnglishSection absDay={absDay} />
+        <EnglishSection absDay={absDay} onReflectionSaved={handleReflectionSaved} />
+      )}
+
+      {/* Day Complete Modal */}
+      {showDayComplete && (
+        <DayCompleteModal
+          absDay={absDay}
+          weekNum={weekNum}
+          dayInWeek={dayInWeek}
+          onClose={() => setShowDayComplete(false)}
+        />
       )}
 
       {/* Navigation */}
