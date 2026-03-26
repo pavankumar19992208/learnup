@@ -116,7 +116,7 @@ export default function LoginScreen() {
         </form>
 
         <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '20px' }}>
-          Made with ❤️ by Pavan — only for Priya
+          Built by Pavan for Priya's learning journey 🚀
         </p>
       </motion.div>
     </div>
