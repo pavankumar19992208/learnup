@@ -96,12 +96,14 @@ export default function DayDetail() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             style={{
-              position: 'fixed', bottom: '90px', left: '50%', transform: 'translateX(-50%)',
+              position: 'fixed', bottom: '90px',
+              left: '50%', transform: 'translateX(-50%)',
               background: 'var(--gradient-primary)',
-              color: '#fff', padding: '12px 22px', borderRadius: '50px',
-              fontWeight: 700, fontSize: '0.9rem', zIndex: 500,
-              whiteSpace: 'nowrap', boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-              maxWidth: '90vw', textAlign: 'center',
+              color: '#fff', padding: '12px 24px', borderRadius: '50px',
+              fontWeight: 700, fontSize: '0.88rem', zIndex: 500,
+              whiteSpace: 'normal', wordBreak: 'break-word',
+              width: 'max-content', maxWidth: 'calc(100vw - 40px)',
+              textAlign: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
             }}
           >
             {boostMsg}
