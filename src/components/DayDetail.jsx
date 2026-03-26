@@ -97,13 +97,12 @@ export default function DayDetail() {
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             style={{
               position: 'fixed', bottom: '90px',
-              left: '50%', transform: 'translateX(-50%)',
+              left: '20px', right: '20px', margin: '0 auto',
               background: 'var(--gradient-primary)',
-              color: '#fff', padding: '12px 24px', borderRadius: '50px',
+              color: '#fff', padding: '12px 20px', borderRadius: '50px',
               fontWeight: 700, fontSize: '0.88rem', zIndex: 500,
-              whiteSpace: 'normal', wordBreak: 'break-word',
-              width: 'max-content', maxWidth: 'calc(100vw - 40px)',
               textAlign: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+              width: 'fit-content', maxWidth: 'calc(100vw - 40px)',
             }}
           >
             {boostMsg}
