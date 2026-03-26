@@ -4,16 +4,14 @@
   <meta charset="utf-8">
   <title>LearnUp</title>
   <script>
-    // GitHub Pages SPA redirect hack
-    // Redirects all 404s back to index.html with the path encoded as a query param
-    var pathSegmentsToKeep = 1; // number of path segments in the base URL (/learnup)
+    // GitHub Pages SPA 404 redirect for /learnup project
+    // When GitHub returns a 404, redirect back to the app base with the path encoded
     var l = window.location;
     l.replace(
       l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-      l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-      l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-      l.hash
+      '/learnup/?p=' + encodeURIComponent(
+        l.pathname.replace('/learnup', '') + l.search + l.hash
+      )
     );
   </script>
 </head>

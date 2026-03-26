@@ -38,7 +38,7 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/learnup">
       <ThemeProvider>
         <LanguageProvider>
           <AuthProvider>
